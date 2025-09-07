@@ -6,6 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import TensorDataset, DataLoader
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
+from pathlib import Path
 
 device = "cuda" if torch.cuda.is_available() else "cpu"
 # torch.set_default_device(device)
@@ -16,7 +18,8 @@ lfw_people = fetch_lfw_people(min_faces_per_person=70, resize=0.4)
 
 # introspect the images arrays to find the shapes (for plotting)
 n_samples, h, w = lfw_people.images.shape
-classes = len(lfw_people.target_names)
+names = lfw_people.target_names
+classes = len(names)
 
 # The following code could be used for data preprocessing if using pytorch
 X = lfw_people.images
@@ -93,7 +96,7 @@ model = model.to(device)
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.001)
 
-n_epochs = 40
+n_epochs = 20
 for epoch in range(n_epochs):
     model.train()
     total_loss = 0
@@ -113,11 +116,15 @@ model.eval()
 correct = 0
 total = 0
 with torch.no_grad():
-    for images, labels in test_loader:
+    for i, (images, labels) in enumerate(test_loader):
         images, labels = images.to(device), labels.to(device)
         outputs = model(images)
         _, predicted = torch.max(outputs, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
+        if i < 5:
+            plt.imshow(images[i].cpu().numpy().squeeze(), cmap='gray')
+            plt.title(f'Predicted: {names[predicted[i].item()]}, Actual: {names[labels[i].item()]}')
+            plt.savefig(Path.home() / f"comp3710/lab2/cnn/cnn_results/prediction_{i}.png")
 
 print("Test Accuracy:", 100 * correct / total, "%")
