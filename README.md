@@ -35,8 +35,11 @@
 - made latent dimension 64. 
 
 Original 
+
 ![image](recognition/vae_images/original/0.png)
+
 Reconstructed
+
 ![image](recognition/vae_images/reconstructed/0.png)
 
 - Reconstructed image loses some detail
