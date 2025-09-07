@@ -25,7 +25,7 @@ latent_dim = 64
 
 lr = 1e-3
 
-epochs = 1
+epochs = 10
 
 train_dataset = OasisDataset(
     "/home/groups/comp3710/OASIS/keras_png_slices_train", transform=transform
