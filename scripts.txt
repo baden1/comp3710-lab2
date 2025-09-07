@@ -1,0 +1,2 @@
+run something quick in bash
+srun -p a100-test --gres=shard:1 --pty bash
