@@ -4,6 +4,7 @@ from vae_utils import Encoder, Decoder, VAE, OasisDataset, transform
 from pathlib import Path
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
+import numpy as np
 
 
 batch_size = 64
@@ -45,15 +46,46 @@ with torch.no_grad():
         latents.append(mu.cpu())
 
 latents = torch.cat(latents, dim=0).numpy()  # shape: [N, latent_dim]
-
 # plot the first two principal components of where images land in the latent space
 pca = PCA(n_components=2)
 latents_2d = pca.fit_transform(latents)
 
-plt.figure(figsize=(8, 6))
-plt.scatter(latents_2d[:, 0], latents_2d[:, 1])
-plt.title("PCA projection of test data to latent space")
-plt.xlabel("PC 1")
-plt.ylabel("PC 2")
-plt.show()
-plt.savefig(Path.home() / "comp3710/lab2/recognition/vae_images/plots/pca-test-to-latent.png")
+
+def plot_latent_projection():
+    plt.figure(figsize=(8, 6))
+    plt.scatter(latents_2d[:, 0], latents_2d[:, 1])
+    plt.title("PCA projection of test data to latent space")
+    plt.xlabel("PC 1")
+    plt.ylabel("PC 2")
+    plt.show()
+    plt.savefig(
+        Path.home()
+        / "comp3710/lab2/recognition/vae_images/plots/pca-test-to-latent.png"
+    )
+
+
+def plot_manifold(model, device, n=15, figsize=10):
+    # For visualization: generate a grid in PCA space
+    grid_x = np.linspace(-3, 3, n)
+    grid_y = np.linspace(-3, 3, n)
+
+    figure = np.zeros((64 * n, 64 * n))
+    for i, yi in enumerate(grid_y):
+        for j, xi in enumerate(grid_x):
+            z_2d = np.array([[xi, yi]])
+            z_high = pca.inverse_transform(z_2d)  # map back to 64D
+            z_high = torch.tensor(z_high, dtype=torch.float32).to(device)
+            x_decoded = model.Decoder(z_high).cpu().view(64, 64)
+            figure[i * 64 : (i + 1) * 64, j * 64 : (j + 1) * 64] = (
+                x_decoded.detach().numpy()
+            )
+
+    plt.figure(figsize=(figsize, figsize))
+    plt.imshow(figure, cmap="gray")
+    plt.axis("off")
+    plt.show()
+    plt.savefig(Path.home() / "comp3710/lab2/recognition/vae_images/plots/manifold.png")
+
+
+plot_latent_projection()
+plot_manifold(model, device, n=15, figsize=10)

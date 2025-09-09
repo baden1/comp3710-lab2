@@ -28,6 +28,8 @@
 
 ## Dawn Bench
 
+After 5 epochs got 84%. I did 5 more and it was still at 84%.
+
 # Recognition
 
 ## VAE
@@ -46,3 +48,6 @@ Reconstructed
 
 Plot of the first two principal components of the mean vectors of the latent distributions where test images land.
 ![image](recognition/vae_images/plots/pca-test-to-latent.png)
+
+Plot of how the encoder takes points from the latent and creates images. The x and y axes represent changes in the first two principal components of the means of the latent space from -3 to 3. The images show how the decoder makes an image from this mean in the latent space.
+![image](recognition/vae_images/plots/manifold.png)
