@@ -1,6 +1,6 @@
 import torch
 from torch.utils.data import Dataset, DataLoader
-from vae_utils import Encoder, Decoder, VAE, OasisDataset, transform
+from recognition.vae.vae_utils import Encoder, Decoder, VAE, OasisDataset, transform
 from pathlib import Path
 import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA

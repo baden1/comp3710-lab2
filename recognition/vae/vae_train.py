@@ -9,7 +9,7 @@ import numpy as np
 from torchvision.utils import save_image, make_grid
 from torch.utils.data import Dataset, DataLoader
 import torchvision.transforms as transforms
-from vae_utils import Encoder, Decoder, VAE, OasisDataset, transform
+from recognition.vae.vae_utils import Encoder, Decoder, VAE, OasisDataset, transform
 from torch.optim import Adam
 from pathlib import Path
 
