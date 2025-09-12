@@ -12,7 +12,7 @@ print(device)
 batch_size = 8
 
 lr = 1e-3
-epochs = 10
+epochs = 4
 
 def train():
     train_masks_dataset = OasisDataset(
@@ -40,7 +40,8 @@ def train():
     for epoch in range(epochs):
         model.train()
         epoch_loss = 0
-        for masks, images in zip(train_masks_loader, train_images_loader):
+        running_loss = 0.0
+        for i, (masks, images) in enumerate(zip(train_masks_loader, train_images_loader)):
             images, masks = images.to(device), masks.to(device)
             # target = torch.argmax(masks, dim=1)
             optimizer.zero_grad()
@@ -49,6 +50,11 @@ def train():
             loss = criterion(outputs, masks)
             loss.backward()
             optimizer.step()
+
+            running_loss += loss.item()
+            if i % 100 == 99:
+                print(f"[{epoch + 1}, {i + 1}] loss: {running_loss / 100:.3f}")
+                running_loss = 0.0
 
             epoch_loss += loss.item()
 
