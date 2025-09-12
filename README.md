@@ -33,21 +33,29 @@ After 5 epochs got 84%. I did 5 more and it was still at 84%.
 # Recognition
 
 ## VAE
+- Made up of 2 main components: encoder and decoder.
+    - encoder takes an original data point and outputs a multivariate normal distribution ($\mu, \Sigma$).
+    - the distribution itself is a member of the 'latent space'
+    - the decoder takes a distribution in the latent space and recreates an image
+    
 - read images to 64x64 = dim 4096.
 - made latent dimension 64. 
 
 Original 
 
-![image](recognition/vae_images/original/0.png)
+![image](recognition/vae/vae_images/original/0.png)
 
 Reconstructed
 
-![image](recognition/vae_images/reconstructed/0.png)
+![image](recognition/vae/vae_images/reconstructed/0.png)
 
 - Reconstructed image loses some detail
 
 Plot of the first two principal components of the mean vectors of the latent distributions where test images land.
-![image](recognition/vae_images/plots/pca-test-to-latent.png)
+![image](recognition/vae/vae_images/plots/pca-test-to-latent.png)
 
 Plot of how the encoder takes points from the latent and creates images. The x and y axes represent changes in the first two principal components of the means of the latent space from -3 to 3. The images show how the decoder makes an image from this mean in the latent space.
-![image](recognition/vae_images/plots/manifold.png)
+![image](recognition/vae/vae_images/plots/manifold.png)
+
+## UNet
+
